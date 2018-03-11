@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
+const gamesRouter = require('./games/router')
 
 app.use(bodyParser.json())
 
@@ -13,28 +14,4 @@ app.use(function(req, res, next) {
   next()
 })
 
-
-app.post('/games', (req, res) => {
-  console.log(typeof(req.body.board));
-
-
-  const game = {
-    board: req.body.board
-  }
-	//console.log('[3,4,5]'.slice(1,-1));
-  //str.slice(2,-2).split('],[').map(s=> s.split(',').map(v=>parseInt(v)))
-
-
-  Game.create(game)
-    .then(entity => {
-      res.status(201)
-      res.json(entity)
-    })
-    .catch(err => {
-      console.error(err)
-      res.status(500).send({
-        message: 'Something went wrong'
-      })
-    })
-
-})
+app.use(gamesRouter)
