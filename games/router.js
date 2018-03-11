@@ -7,6 +7,10 @@ const Router = require('express').Router
 // const stringToArrayOfArrayOfInteger = (str) => ( //LOL :P
 //   str.slice(2,-2).split('],[').map(s=> s.split(',').map(v=>parseInt(v)))
 // )
+const stringToArrayOfInteger = (str) => (
+  str.slice(1,-1).split(',').map(s=>parseInt(s))
+)
+
 const router = new Router()
 
 router.post('/games', (req, res) => {
@@ -38,5 +42,59 @@ router.post('/games', (req, res) => {
     })
 
 })
+
+///////////////////
+/*We pass a parameter move=[INTEGER,INTEGER] to update the game
+  and we send the current status of the game, the errors and a boolean to tell
+  if the game is finished
+*/
+//////////
+const updateOrPatch = (req, res) => {
+  //const productId = Number(req.params.id
+  let move = stringToArrayOfInteger(req.body.move)
+  //console.log(move);
+  // if (req.body.preferredbreed) {
+	// 	//const a=updates.preferredbreed.concparseInt(req.body.preferredbreed)
+	// 	console.log(updates.preferredbreed);
+	//   //updates.preferredbreed.push(parseInt(req.body.preferredbreed))
+	// }
+  // find the product in the DB
+  Game.findById(req.params.id)
+    .then(entity => {
+      //console.log(entity.board);
+      if (func.gameFinished(entity.board)) { //Not tested yet
+        return json({message: 'game is finished'})
+      }
+
+      let updates=entity.dataValues
+      //console.log(updates.board[move[0]][move[1]]);
+      //console.log(updates);
+        updates.board[move[0]][move[1]]=(updates.board[move[0]][move[1]]+1)%3
+      //console.log(updates);
+			return entity.update(updates)
+		})
+
+    .then(final => {
+      // respond with the changed product and status code 200 OK
+      console.log(final.board);
+      const errors ={
+        dupeRows: func.duplicateRows(final.board),
+        dupeCols: func.duplicateCols(final.board),
+        errorRows: func.rows(final.board).map(r => (func.threeOrMoreInARow(r))),
+        errorCols: func.cols(final.board).map(c => (func.threeOrMoreInARow(c))),
+      }
+      const finished= func.gameFinished(final.board)
+      res.send({game:final.dataValues,errors,finished})
+    })
+    .catch(error => {
+      res.status(500).send({
+        message: `Something went wrong`,
+        error
+      })
+    })
+}
+
+router.put('/games/:id', updateOrPatch)
+router.patch('/games/:id', updateOrPatch)
 
 module.exports = router
