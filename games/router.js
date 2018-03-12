@@ -11,9 +11,16 @@ const stringToArrayOfInteger = (str) => (
   str.slice(1,-1).split(',').map(s=>parseInt(s))
 )
 
+const requireUser = (req, res, next) => {
+	if (req.user) next()
+	else res.status(401).send({
+		message: 'Please login'
+	})
+}
+
 const router = new Router()
 
-router.post('/games', (req, res) => {
+router.post('/games',requireUser, (req, res) => {
   //console.log(func.areIdentical([1,2,1,1,1,0],[2,1,2,1,1,1]));
   const [board,locked] = func.fillBoard(6)
   const game = {
@@ -94,7 +101,7 @@ const updateOrPatch = (req, res) => {
     })
 }
 
-router.put('/games/:id', updateOrPatch)
-router.patch('/games/:id', updateOrPatch)
+router.put('/games/:id', requireUser, updateOrPatch)
+router.patch('/games/:id', requireUser, updateOrPatch)
 
 module.exports = router
