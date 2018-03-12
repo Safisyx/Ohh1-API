@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
 const gamesRouter = require('./games/router')
+const usersRouter = require('./users/router')
 
 app.use(bodyParser.json())
 
@@ -15,3 +16,4 @@ app.use(function(req, res, next) {
 })
 
 app.use(gamesRouter)
+app.use(usersRouter)
