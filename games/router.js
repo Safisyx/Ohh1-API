@@ -104,4 +104,22 @@ const updateOrPatch = (req, res) => {
 router.put('/games/:id', requireUser, updateOrPatch)
 router.patch('/games/:id', requireUser, updateOrPatch)
 
+router.delete('/games/:id', requireUser, (req, res) => {
+  Game.findById(req.params.id)
+    .then(entity => {
+      return entity.destroy()
+    })
+    .then(_ => {
+      res.send({
+        message: `Game ${req.params.id} deleted succesfully`
+      })
+    })
+    .catch(error => {
+      res.status(500).send({
+        message: `Something went wrong`,
+        error
+      })
+    })
+})
+
 module.exports = router
