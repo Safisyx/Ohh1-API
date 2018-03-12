@@ -20,9 +20,10 @@ const requireUser = (req, res, next) => {
 
 const router = new Router()
 
-router.post('/games',requireUser, (req, res) => {
+router.post('/games', (req, res) => {
   //console.log(func.areIdentical([1,2,1,1,1,0],[2,1,2,1,1,1]));
-  const [board,locked] = func.fillBoard(6)
+  const size=parseInt(req.body.boardSize)
+  const [board,locked] = func.fillBoard(size)
   const game = {
   	board,
     locked,
