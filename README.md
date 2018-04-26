@@ -7,4 +7,4 @@ Run ```npm install``` to install the dependencies, you may want to use [yarn](ht
 Run ```node_modules/.bin/sequelize db:migrate``` to create the tables.  
 Run ```node .``` to start the api
 
-###Safidy Ratsimbazafy
+### Safidy Ratsimbazafy
