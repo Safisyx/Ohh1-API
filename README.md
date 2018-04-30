@@ -1,6 +1,6 @@
 # Ohh1-API
-Back-end for https://github.com/Safisyx/Ohh1 (Node, Express, Sequelize)  
-BUT, they are not connected yet :smiley: (Will do it asap).  
+This will be a back-end for https://github.com/Safisyx/Ohh1 (Node, Express, Sequelize)  
+They are not connected yet :smiley: (Will do it asap).  
 For now the frontend is playable without any connection to the backend. The backend is also playable though :smiley:, make use of httpie for example.  
 The aim of this project was to keep track of the state of the game and can the client to retrieve the latest saved game.  
 ## To run it
